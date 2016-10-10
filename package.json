@@ -4,10 +4,10 @@
   "description": "Extensible autocomplete+ provider for Lua",
   "repository": {
     "type": "git",
-    "url": "https://github.com/dapetcu21/autocomplete-lua.git"
+    "url": "https://github.com/dapetcu21/atom-autocomplete-lua.git"
   },
   "bugs": {
-    "url": "https://github.com/dapetcu21/autocomplete-lua/issues"
+    "url": "https://github.com/dapetcu21/atom-autocomplete-lua/issues"
   },
   "main": "index.js",
   "providedServices": {
