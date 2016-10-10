@@ -1,0 +1,31 @@
+{
+  "name": "autocomplete-lua",
+  "version": "0.0.0",
+  "description": "Extensible autocomplete+ provider for Lua",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dapetcu21/autocomplete-lua.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dapetcu21/autocomplete-lua/issues"
+  },
+  "main": "index.js",
+  "providedServices": {
+    "autocomplete.provider": {
+      "versions": {
+        "2.0.0": "getProvider"
+      }
+    }
+  },
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "atom": "*"
+  },
+  "devDependencies": {
+    "standard": "^8.3.0"
+  },
+  "dependencies": {
+    "luaparse": "^0.2.1"
+  }
+}
