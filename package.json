@@ -26,6 +26,7 @@
     "standard": "^8.3.0"
   },
   "dependencies": {
+    "lodash.clonedeep": "^4.5.0",
     "luaparse": "^0.2.1"
   }
 }
