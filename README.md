@@ -6,13 +6,12 @@ This package aims to parse Lua files with [oxyc/luaparse](https://github.com/oxy
 
 ## Features
 
-* Nothing implemented yet. (Soon™)
+* Limited type inference mechanism
+* Table member completions
 
 ## Planned features
 
 * Scope-aware variable name suggestions
-* Table member completions
-* Limited type inference
 * Autocomplete `require`d modules
 * Configurable globals environment and API docs
 * [Defold](http://defold.com) integration
