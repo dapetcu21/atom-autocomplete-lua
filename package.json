@@ -31,6 +31,6 @@
   },
   "dependencies": {
     "lodash.clonedeep": "^4.5.0",
-    "luaparse": "^0.2.1"
+    "luaparse": "github:dapetcu21/luaparse#patch-1"
   }
 }
