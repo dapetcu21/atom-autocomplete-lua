@@ -15,6 +15,18 @@
       "versions": {
         "2.0.0": "getProvider"
       }
+    },
+    "autocomplete-lua.options-provider": {
+      "versions": {
+        "1.0.0": "getOptionProviders"
+      }
+    }
+  },
+  "consumedServices": {
+    "autocomplete-lua.options-provider": {
+      "versions": {
+        "^1.0.0": "onOptionProviders"
+      }
     }
   },
   "author": "",
@@ -34,6 +46,7 @@
   },
   "dependencies": {
     "lodash.clonedeep": "^4.5.0",
+    "lodash.includes": "^4.3.0",
     "luaparse": "github:dapetcu21/luaparse#patch-1"
   }
 }
