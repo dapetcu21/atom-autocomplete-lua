@@ -27,7 +27,8 @@
     "standard": "^8.3.0"
   },
   "standard": {
-    "parser": "babel-eslint"
+    "parser": "babel-eslint",
+    "globals": [ "__LOG__" ]
   },
   "dependencies": {
     "lodash.clonedeep": "^4.5.0",
