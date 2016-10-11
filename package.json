@@ -9,7 +9,7 @@
   "bugs": {
     "url": "https://github.com/dapetcu21/atom-autocomplete-lua/issues"
   },
-  "main": "index.js",
+  "main": "lib/index.js",
   "providedServices": {
     "autocomplete.provider": {
       "versions": {
