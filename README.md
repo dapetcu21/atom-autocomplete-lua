@@ -2,7 +2,9 @@
 
 Atom Autocomplete+ provider for Lua.
 
-This package aims to parse Lua files with [oxyc/luaparse](https://github.com/oxyc/luaparse) and generate context-aware completions through syntactic analysis.
+This package aims to parse Lua files with [oxyc/luaparse](https://github.com/oxyc/luaparse) and generate scope and type-aware completions with syntactic analysis.
+
+![](https://cloud.githubusercontent.com/assets/428060/19273399/0c29a55a-8fd5-11e6-90ce-76972345aa86.png)
 
 ## Features
 
