@@ -13,5 +13,7 @@ This package aims to parse Lua files with [oxyc/luaparse](https://github.com/oxy
 
 * Scope-aware variable name suggestions
 * Autocomplete `require`d modules
-* Configurable globals environment and API docs
-* [Defold](http://defold.com) integration
+* `.luacompleterc` file to define globals and doc-strings
+* Configuration service for other packages to programatically define globals
+* Completion for the Lua standard library
+* [Defold](http://defold.com) integration (or separate package)
