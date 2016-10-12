@@ -11,15 +11,18 @@ This package aims to parse Lua files with [oxyc/luaparse](https://github.com/oxy
 * Limited type inference mechanism
 * Table member completions
 * `.luacompleterc` file to define additional globals
+* Doc-strings in `.luacompleterc`
+* Configuration service for other packages to programmatically define globals
 
 ## Planned features
 
 * Scope-aware variable name suggestions
 * Autocomplete `require`d modules
-* Doc-strings in `.luacompleterc`
-* Configuration service for other packages to programatically define globals
 * Completion for the Lua standard library
-* [Defold](http://defold.com) integration (or separate package)
+
+## Defold
+
+For Defold completion with this package, check out [Defold IDE](http://atom.io/packages/defold-ide)
 
 ## Configuration
 
@@ -51,6 +54,12 @@ They look like this:
   "fields": { // just for "table"s. an object describing the fields this table might contain
     "member_name": { /* type definition for table member */ }
     /* ... */
-  }
+  },
+  "description": "Optional short description of your symbol",
+  "link": "http://optional.link/to/full/api/docs"
 }
 ```
+
+## Option providers
+
+> TODO
