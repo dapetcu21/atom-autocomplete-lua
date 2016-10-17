@@ -9,18 +9,18 @@ This package aims to parse Lua files with [oxyc/luaparse](https://github.com/oxy
 ## Features
 
 * Limited type inference mechanism
+* Scope-aware variable name suggestions
 * Table member completions on `.` and `:`
 * Snippets for function call arguments
 * Aware of `setmetatable` and function return types
+* Completion for the Lua standard library
 * `.luacompleterc` file to define additional globals
 * Doc-strings in `.luacompleterc`
 * Configuration service for other packages to programmatically define globals
 
 ## Planned features
 
-* Scope-aware variable name suggestions
 * Autocomplete `require`d modules
-* Completion for the Lua standard library
 
 ## Defold
 
