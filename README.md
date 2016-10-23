@@ -64,19 +64,109 @@ All options are optional. Here's what each option does
 
 ## Type definitions
 
-They look like this:
+The general format of a type definition is:
 
 ```javascript
 {
   "type": "type_name", // one of "function", "table", "number", "boolean", "string" or "unknown"
-  "fields": { // just for "table"s. an object describing the fields this table might contain
-    "member_name": { /* type definition for table member */ }
-    /* ... */
-  },
   "description": "Optional short description of your symbol",
   "link": "http://optional.link/to/full/api/docs"
 }
 ```
+
+### Tables
+
+Tables (`"type": "table"`) have 2 more properties:
+  * `fields`: *Required.* An object mapping table fields to their corresponding type definition. Even though Lua allows indexing tables with any value, only string keys are supported for autocompletion purposes.
+  * `metatable`: *Optional.* The type definition of the metatable of this table, if it has one. `autocomplete-lua` is aware of keys like `__index` in this metatable and uses them for completion. If present, the `type` of the metatable must be `"table"`.
+
+**Example:**
+```javascript
+{ // Type definition for a student
+  "type": "table",
+  "fields": {
+    "name": { type: "string" },
+    "surname": { type: "string" },
+    "height": { type: "number" },
+  },
+  "metatable": {
+    "type": "table",
+    "fields": {
+      "__index": {
+        "type": "table",
+        "fields": { "skip_rope": { "type": "function" } }
+      }
+    }
+  }
+}
+```
+
+### Functions
+
+Functions (`"type": "function"`) can have a few more optional properties:
+  * `returnTypes`: An array of type definitions describing the types of the function's return values.
+  * `args`: An array of argument definitions (see below).
+  * `argsDisplay`: In case you want your arguments to be displayed in the autocomplete dropdown in a custom way, you can provide a string of the argument list here.
+  * `argsDisplayOmitSelf`: Same as above, but displayed when completing method calls with `:`. You should provide the same arg list string, but with the first argument removed. Defaults to `argsDisplay`.
+
+Arguments are of the form `{ "name": "arg_name", "displayName": "display_name" }`,
+where `displayName` is optional.
+
+`displayName` will be displayed in the
+autocomplete dropdown, while `name` will be part of the inserted snippet.
+This is useful for things like optional arguments:
+
+```javascript
+{
+  "type": "function",
+  "args": [{ "name": "arg1" }, { "name": "arg2", "displayName": "[arg2]" }],
+}
+```
+
+will produce `f(arg1, [arg2])` in the dropdown and `f(arg1, arg2)` after being inserted.
+
+In rare cases, `displayName` might be unsuitable for you. `argsDisplay` and `argsDisplayOmitSelf` can be used to manually specify the comma-separated list of
+arguments.
+
+For example, you can use it to customize comma placement in relation to `[`:
+
+```javascript
+{
+  "type": "function",
+  "args": [{ "name": "self" }, { "name": "arg1" }, { "name": "arg2" }],
+  "argsDisplay": "self[, arg1[, arg2]]",
+  "argsDisplayOmitSelf": "[arg1[, arg2]]"
+}
+```
+
+This will produce `f(self[, arg1[, arg2]])` in the dropdown and `f(self, arg1, arg2)`
+after being inserted.
+
+### Function variants
+
+Sometimes, you may have polymorphic functions which can be called with a number
+of different argument configuration. You might want to show all of these
+versions separately in the autocomplete dropdown.
+
+You can provide multiple versions of the same function by moving `link`,
+`description`, `args`, `argsDisplay` and `argsDisplayOmitSelf` inside a
+`variants` array like so:
+
+```javascript
+{ // Type definition for a get(url_or_filename) function
+  "type": "function",
+  "variants": [{
+    "args": [{ name: "url" }],
+    "description": "Fetches an URL and returns a string with the contents"
+  }, {
+    "args": [{ name: "filename" }],
+    "description": "Read the file at filename and returns a string with the contents"
+  }]
+}
+```
+
+The autocomplete dropdown will show both `get(url)` and `get(filename)` with their
+corresponding descriptions.
 
 ## Option providers
 
