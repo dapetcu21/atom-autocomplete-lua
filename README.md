@@ -56,7 +56,7 @@ All options are optional. Here's what each option does
 |Option|Default|Description|
 |-|-|-|
 |`global`|`{ type: 'table', fields: {} }`|The type definition of the global environment. Define additional fields on this table to declare globals available in your Lua environment. Read the [Type definitions](#type-definitions) section for more info.
-|`namedTypes`|`{}`|To avoid deep nesting and allow multiple places to reference a single type, you can define named types. Read the [Type definitions](#type-definitions) section for more info.
+|`namedTypes`|`{}`|To avoid deep nesting and allow multiple places to reference a single type, you can define named types. Read the [Named types](#named-types) section for more info.
 |`luaVersion`|`"5.2"`|The version of Lua your code is targeting. Valid values are `"5.1"`, `"5.2"` and `"5.3"`.
 |`packagePath`|`"./?.lua"`|The value of `LUA_PATH` used when resolving required modules.
 |`cwd`|`.`|The current directory used to resolve relative paths in `packagePath`. If `cwd` is relative, it's considered relative to the parent directory of `.luacompleterc`.
@@ -68,7 +68,7 @@ The general format of a type definition is:
 
 ```javascript
 {
-  "type": "type_name", // one of "function", "table", "number", "boolean", "string" or "unknown"
+  "type": "type_name", // one of "function", "table", "number", "boolean", "string" or "unknown", "ref"
   "description": "Optional short description of your symbol",
   "link": "http://optional.link/to/full/api/docs"
 }
@@ -167,6 +167,42 @@ You can provide multiple versions of the same function by moving `link`,
 
 The autocomplete dropdown will show both `get(url)` and `get(filename)` with their
 corresponding descriptions.
+
+### Named types
+
+There are often cases where you want to use the same type definition in
+multiple places. In these situations, you can use named types in your `.luacompleterc`.
+
+Just use `{ "type": "ref", "name": "my_named_type" }` instead of your type
+definition and define `my_named_type` in `namedTypes`.
+
+**Example .luacompleterc:**
+```javascript
+{
+  "global": {
+    "type": "table",
+    "fields": {
+      "make_a_cat": {
+        "type": "function",
+        "returnTypes": [{ "type": "ref", "name": "cat" }]
+      },
+      "make_a_cat_somehow_else": {
+        "type": "function",
+        "returnTypes": [{ "type": "ref", "name": "cat" }]
+      },
+    }
+  },
+  "namedTypes": {
+    "cat": {
+      "type": "table",
+      "fields": {
+        "color": { "type": "string" },
+        "is_fluffy": { "type": "boolean" }
+      }
+    }
+  }
+}
+```
 
 ## Option providers
 
