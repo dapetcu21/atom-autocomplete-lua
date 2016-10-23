@@ -170,4 +170,7 @@ corresponding descriptions.
 
 ## Option providers
 
+All the options provided in a `.luacompleterc` can be programmatically provided
+by plugin packages (like [Defold IDE](http://atom.io/packages/defold-ide)).
+
 > TODO
