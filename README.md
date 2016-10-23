@@ -51,7 +51,7 @@ the following structure:
 }
 ```
 
-All options are optional. Here's what each option does
+All options are optional. Here's what each option does:
 
 |Option|Default|Description|
 |-|-|-|
