@@ -209,4 +209,80 @@ definition and define `my_named_type` in `namedTypes`.
 All the options provided in a `.luacompleterc` can be programmatically provided
 by plugin packages (like [Defold IDE](http://atom.io/packages/defold-ide)).
 
+Start by adding this to your `package.json`:
+
+```json
+"providedServices": {
+  "autocomplete-lua.options-provider": {
+    "versions": {
+      "1.0.0": "getOptionProvider"
+    }
+  }
+}
+```
+
+Then, in your package's JS object:
+
+```javascript
+getOptionProvider () {
+  return myProvider; // You can also return an array of providers if you have more
+}
+```
+
+The provider is an object (or a class) with the following interface:
+
+```javascript
+const myProvider = {
+  priority: 20,
+
+  getOptions (request, getPreviousOptions, utils, cache) {
+    // Just return the options from the previous provider
+    return getPreviousOptions().then(previousOptions => {
+      return { options: previousOptions }
+    })
+  }
+
+  dispose () {
+    // Destroy stuff
+  }
+}
+```
+
+### `priority` and `getPreviousOptions()`
+
+Each time a completion is needed (roughly at each keystroke), `autocomplete-lua`
+sorts all the option providers by their priority and calls the `getOptions()`
+method of the highest priority option provider.
+
+The option provider can choose to call the next-highest-in-priority provider
+by calling `getPreviousOptions()`. `getPreviousOptions()` returns a promise
+to the options object provided by the next-in-line provider.
+
+There are 3 option providers that come with `autocomplete-lua`:
+  * **StdLibProvider**. *Priority 100.* Adds Lua's standard library functions to the options.
+  * **LuaCompleteRcProvider**. *Priority 10.* Adds the contents of `.luacompleterc` to the options.
+  * **EmptyProvider**. *Priority 0.* Just returns an empty options object. Acts as fallback for `getPreviousOptions()`.
+
+### `dispose()`
+
+Optional function. `dispose()` is called when your provider is not needed anymore.
+
+### `getOptions(request, getPreviousOptions, utils, cache)`
+
+This function is called when your provider is expected to return a new set of options.
+
+`request` comes [directly from Autocomplete+](https://github.com/atom/autocomplete-plus/wiki/Provider-API#the-suggestion-requests-options-object),
+with the addition of `request.filePath`, the absolute path to the current file.
+
+The return value is an object of the form `{ options }`. The same object is passed
+to `getOptions()` as `cache` the next time the function is called on the same file,
+so you can store additional arbitrary properties on it that you'd like to receive
+in `cache`. Returning a promise to this object is also supported.
+
+It's strongly encouraged to always return the same `options` object if nothing
+changed from the last call. Read on about `utils.mergeOptionsCached()` for
+a simple way to do this.
+
+### `utils`
+
 > TODO
