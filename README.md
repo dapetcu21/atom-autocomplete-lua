@@ -259,9 +259,13 @@ by calling `getPreviousOptions()`. `getPreviousOptions()` returns a promise
 to the options object provided by the next-in-line provider.
 
 There are 3 option providers that come with `autocomplete-lua`:
-  * **StdLibProvider**. *Priority 100.* Adds Lua's standard library functions to the options.
-  * **LuaCompleteRcProvider**. *Priority 10.* Adds the contents of `.luacompleterc` to the options.
-  * **EmptyProvider**. *Priority 0.* Just returns an empty options object. Acts as fallback for `getPreviousOptions()`.
+  * **[StdLibProvider]**. *Priority 100.* Adds Lua's standard library functions to the options.
+  * **[LuaCompleteRcProvider]**. *Priority 10.* Adds the contents of `.luacompleterc` to the options.
+  * **[EmptyProvider]**. *Priority 0.* Just returns an empty options object. Acts as fallback for `getPreviousOptions()`.
+
+[StdLibProvider]:https://github.com/dapetcu21/atom-autocomplete-lua/blob/master/lib/options/stdlib.js
+[LuaCompleteRcProvider]:https://github.com/dapetcu21/atom-autocomplete-lua/blob/master/lib/options/luacompleterc.js
+[EmptyProvider]:https://github.com/dapetcu21/atom-autocomplete-lua/blob/master/lib/options/empty.js
 
 ### `dispose()`
 
