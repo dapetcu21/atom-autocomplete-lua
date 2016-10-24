@@ -287,6 +287,66 @@ It's strongly encouraged to always return the same `options` object if nothing
 changed from the last call. Read on about `utils.mergeOptionsCached()` for
 a simple way to do this.
 
-### `utils`
+### `utils.reviveOptions(options)`
 
-> TODO
+Takes an options object and resolves all references to named types. (Replaces `{ type: 'ref', name: 'myRef' }` with `namedTypes.myRef`). This should be called after you read the
+options object from permanent storage.
+
+Returns the same `options` object.
+
+### `utils.mergeOptions(previousOptions, newOptions)`
+
+Takes 2 options objects, merges them and returns the result.
+
+Fields in `newOptions` overwrite fields in `previousOptions`. The `global` fields are deeply merged.
+
+### `utils.mergeOptionsCached(previousOptions, newOptions, cache[, merger])`
+
+Uses `mergeOptions()` to merge `previousOptions` and `newOptions` if any of the
+two are different from `cache.previousOptions` and `cache.newOptions`, else
+returns `cache.options`.
+
+If the merge takes place, `merger(mergedOptions, previousOptions, newOptions)`
+is called on the newly merged object to do additional custom merging work.
+
+Returns an object `{ options, previousOptions, newOptions }` suitable for returning
+as the cache object from `getOptions()`.
+
+A recommended pattern is the following:
+
+```javascript
+getOptions = async (request, getPreviousOptions, utils, cache) => {
+  if (providerIsNotApplicableToTheCurrentFile) {
+    return { options: await getPreviousOptions() }
+  }
+  const newOptions = conjureABunchOfNewOptions()
+  const previousOptions = await getPreviousOptions()
+  return utils.mergeOptionsCached(previousOptions, newOptions, cache, mergedOptions => {
+    mergedOptions.oneMoreThing = 'this thing'
+  })
+}
+```
+
+### `util.<typename>New()`
+
+Creates a new type definition for a `<typename>`. Available functions are:
+`tableNew()`, `booleanNew()`, `functionNew()`, `numberNew()`, `unknownNew()`, `nilNew()`
+
+### `util.tableSet(table, key, value)`
+
+Sets the field identified by `key` in the table type definition `table` to the
+type definition `value`.
+
+### `util.tableGet(table, key)`
+
+Gets the type definition corresponding to the field identified by `key` in the
+table type definition `table`.
+
+### `util.tableSetMetatable(table, metatable)`
+
+Sets the metatable type definition in the table type definition `table` to the
+type definition `metatable`.
+
+### `util.tableGetMetatable(table)`
+
+Gets the type definition of the metatable of the table type definition `table`.
