@@ -1,6 +1,6 @@
 # atom-autocomplete-lua
 
-[![](https://img.shields.io/apm/dm/autocomplete-lua.svg)](http://atom.io/packages/autocomplete-lua) [![](https://img.shields.io/badge/liberapay-donate-yellow.svg)](https://liberapay.com/dapetcu21/donate)
+[![](https://img.shields.io/apm/dm/autocomplete-lua.svg)](http://atom.io/packages/autocomplete-lua) [![](https://img.shields.io/badge/liberapay-donate-yellow.svg)](https://liberapay.com/dapetcu21/donate) [![](https://img.shields.io/badge/paypal-donate-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KRJ4ZRJNU76Y2)
 
 Atom Autocomplete+ provider for Lua.
 
