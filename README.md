@@ -1,5 +1,7 @@
 # atom-autocomplete-lua
 
+[![](https://img.shields.io/apm/dm/autocomplete-lua.svg)](http://atom.io/packages/autocomplete-lua) [![](https://img.shields.io/badge/liberapay-donate-yellow.svg)](https://liberapay.com/dapetcu21/donate)
+
 Atom Autocomplete+ provider for Lua.
 
 This package aims to parse Lua files with [oxyc/luaparse](https://github.com/oxyc/luaparse) and generate scope and type-aware completions with syntactic analysis.
