@@ -29,6 +29,29 @@ function onSymbol (name, link) {
   symbols.push(symbol)
 }
 
+function unescapeHtml (html) {
+  return html.replace(/[\s\n]+/g, ' ')
+}
+
+function getFirstParagraph (node) {
+  while (node && node.textContent.match(/^[\s\n]*$/)) {
+    node = node.nextSibling
+  }
+
+  if (!node) { return '' }
+
+  if (node.nodeName === 'P') {
+    return unescapeHtml(node.textContent)
+  }
+
+  let text = []
+  while (node && !node.nodeName.match(/^(P|H[1-9])$/)) {
+    text.push(unescapeHtml(node.textContent))
+    node = node.nextSibling
+  }
+  return text.join('')
+}
+
 function onEnd () {
   Promise
     .all(Object.keys(pagesToCrawl).map(page =>
@@ -38,7 +61,7 @@ function onEnd () {
           pagesToCrawl[page].forEach(symbol => {
             const a = window.document.getElementsByName(symbol.hash)[0]
             symbol.title = a.textContent
-            const description = a.parentElement.nextElementSibling.textContent
+            const description = getFirstParagraph(a.parentElement.nextSibling).trim()
             symbol.description = description.replace(/^\s*|\s*$/g, '')
           })
           resolve()
