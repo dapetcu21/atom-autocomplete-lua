@@ -111,8 +111,8 @@ Functions (`"type": "function"`) can have a few more optional properties:
   * `argsDisplay`: In case you want your arguments to be displayed in the autocomplete dropdown in a custom way, you can provide a string of the argument list here.
   * `argsDisplayOmitSelf`: Same as above, but displayed when completing method calls with `:`. You should provide the same arg list string, but with the first argument removed. Defaults to `argsDisplay`.
 
-Arguments are of the form `{ "name": "arg_name", "displayName": "display_name" }`,
-where `displayName` is optional.
+Arguments are of the form `{ "name": "arg_name", "displayName": "display_name", "typeDef": typeDef }`,
+where `displayName` and `typeDef` are optional.
 
 `displayName` will be displayed in the
 autocomplete dropdown, while `name` will be part of the inserted snippet.
@@ -147,7 +147,7 @@ after being inserted.
 ### Function variants
 
 Sometimes, you may have polymorphic functions which can be called with a number
-of different argument configuration. You might want to show all of these
+of different argument configurations. You might want to show all of these
 versions separately in the autocomplete dropdown.
 
 You can provide multiple versions of the same function by moving `link`,
