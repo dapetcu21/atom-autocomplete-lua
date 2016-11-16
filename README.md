@@ -107,12 +107,13 @@ Tables (`"type": "table"`) have 2 more properties:
 
 Functions (`"type": "function"`) can have a few more optional properties:
   * `returnTypes`: An array of type definitions describing the types of the function's return values.
-  * `args`: An array of argument definitions (see below).
+  * `args`: An array of argument name definitions (see below).
   * `argsDisplay`: In case you want your arguments to be displayed in the autocomplete dropdown in a custom way, you can provide a string of the argument list here.
   * `argsDisplayOmitSelf`: Same as above, but displayed when completing method calls with `:`. You should provide the same arg list string, but with the first argument removed. Defaults to `argsDisplay`.
+  * `argTypes`: An array of argument type definitions (or `null` when type is unknown).
 
-Arguments are of the form `{ "name": "arg_name", "displayName": "display_name", "typeDef": typeDef }`,
-where `displayName` and `typeDef` are optional.
+Argument names are of the form `{ "name": "arg_name", "displayName": "display_name" }`,
+where `displayName` is optional.
 
 `displayName` will be displayed in the
 autocomplete dropdown, while `name` will be part of the inserted snippet.
