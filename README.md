@@ -59,7 +59,7 @@ All options are optional. Here's what each option does:
 |--------|---------|-------------|
 |`global`|`{ type: 'table', fields: {} }`|The type definition of the global environment. Define additional fields on this table to declare globals available in your Lua environment. Read the [Type definitions](#type-definitions) section for more info.
 |`namedTypes`|`{}`|To avoid deep nesting and allow multiple places to reference a single type, you can define named types. Read the [Named types](#named-types) section for more info.
-|`luaVersion`|`"5.2"`|The version of Lua your code is targeting. Valid values are `"5.1"`, `"5.2"` and `"5.3"`.
+|`luaVersion`|`"5.2"`|The version of Lua your code is targeting. Valid values are `"5.1"`, `"5.2"`, `"5.3"` and `"luajit-2.0"`.
 |`packagePath`|`"./?.lua"`|The value of `LUA_PATH` used when resolving required modules.
 |`cwd`|`.`|The current directory used to resolve relative paths in `packagePath`. If `cwd` is relative, it's considered relative to the parent directory of `.luacompleterc`.
 
