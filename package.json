@@ -36,11 +36,16 @@
   },
   "devDependencies": {
     "babel-eslint": "^7.0.0",
+    "eslint-plugin-flowtype": "^2.30.0",
+    "flow-bin": "^0.39.0",
     "jsdom": "^9.7.1",
     "standard": "^8.3.0"
   },
   "standard": {
     "parser": "babel-eslint",
+    "plugins": [
+      "flowtype"
+    ],
     "globals": [
       "__LOG__"
     ]
