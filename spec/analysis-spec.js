@@ -85,11 +85,25 @@ describe('When analysing with empty options', () => {
   it('should suggest function', () => {
     waitsForPromise(async () => {
       const suggestions = await getSuggestions(options, `
-        function foo() end
+        function foo (bar, baz) end
         __prefix_placeholder__.__prefix_placeholder__()
       `)
       expect(getNames(suggestions)).toEqual(['_G', 'foo'])
       expect(suggestions[1].rightLabel).toEqual('function')
+      expect(suggestions[1].displayText).toEqual('foo(bar, baz)')
+    })
+  })
+
+  it('should suggest function return type', () => {
+    waitsForPromise(async () => {
+      const suggestions = await getSuggestions(options, `
+        function foo ()
+          return { bar = 42 }
+        end
+        foo().__prefix_placeholder__()
+      `, '', '.')
+      expect(getNames(suggestions)).toEqual(['bar'])
+      expect(suggestions[0].rightLabel).toEqual('number')
     })
   })
 })
