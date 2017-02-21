@@ -6,7 +6,7 @@ import { tableNew, contextNew } from '../lib/typedefs'
 
 const getNames = (suggestions) => suggestions.map(suggestion => suggestion.text)
 
-async function getSuggestions (options, text, prefix = '', dot = null) {
+async function getSuggestions (options, text, dot = null, prefix = '') {
   const analysis = new Analysis(options, { prefix, dot })
   analysis.end(text)
   let results = await analysis.solveQuery()
@@ -63,7 +63,7 @@ describe('When analysing with empty options', () => {
           a = { foo = 42 }
           a.bar = 'baz'
           a.__prefix_placeholder__()
-        `, '', '.')
+        `, '.')
         expect(getNames(suggestions)).toEqual(['bar', 'foo'])
         expect(suggestions[0].rightLabel).toEqual('string')
         expect(suggestions[1].rightLabel).toEqual('number')
@@ -76,7 +76,7 @@ describe('When analysing with empty options', () => {
           a = { foo = 42 }
           a = { bar = 'baz' }
           a.__prefix_placeholder__()
-        `, '', '.')
+        `, '.')
         expect(getNames(suggestions)).toEqual(['bar', 'foo'])
         expect(suggestions[0].rightLabel).toEqual('string')
         expect(suggestions[1].rightLabel).toEqual('number')
@@ -129,7 +129,7 @@ describe('When analysing with empty options', () => {
             return { bar = 42 }
           end
           foo().__prefix_placeholder__()
-        `, '', '.')
+        `, '.')
         expect(getNames(suggestions)).toEqual(['bar'])
         expect(suggestions[0].rightLabel).toEqual('number')
       })
@@ -145,7 +145,7 @@ describe('When analysing with empty options', () => {
         }
         setmetatable(a, metatable)
         a.__prefix_placeholder__()
-      `, '', '.')
+      `, '.')
       expect(getNames(suggestions)).toEqual(['bar', 'foo'])
       expect(suggestions[0].rightLabel).toEqual('string')
       expect(suggestions[1].rightLabel).toEqual('number')
