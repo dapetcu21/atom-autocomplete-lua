@@ -2,7 +2,11 @@
 /* global describe, it, expect, beforeEach, waitsForPromise */
 
 import Analysis from '../lib/analysis'
-import { tableNew, contextNew } from '../lib/typedefs'
+import {
+  tableNew, contextNew,
+  functionNew, numberNew, stringNew,
+  functionPushArgumentType, tableSet
+} from '../lib/typedefs'
 
 const getNames = (suggestions) => suggestions.map(suggestion => suggestion.text)
 
@@ -163,6 +167,33 @@ describe('When analysing with empty options', () => {
         __prefix_placeholder__.__prefix_placeholder__()
       `)
       expect(getNames(suggestions)).toEqual(['_G', 'b'])
+    })
+  })
+})
+
+describe('When analysing with predefined function', () => {
+  let options
+
+  beforeEach(() => {
+    const context = contextNew()
+    const globalTable = tableNew()
+    const f = functionNew()
+    tableSet(context, globalTable, 'f', f)
+    functionPushArgumentType(context, f, stringNew())
+    functionPushArgumentType(context, f, numberNew())
+    options = { context, global: globalTable }
+  })
+
+  it('should suggest arguments inside re-defined function', () => {
+    waitsForPromise(async () => {
+      const suggestions = await getSuggestions(options, `
+        function f(someString, someNumber)
+          __prefix_placeholder__.__prefix_placeholder__()
+        end
+      `)
+      expect(getNames(suggestions)).toEqual(['_G', 'f', 'someNumber', 'someString'])
+      expect(suggestions[2].rightLabel).toEqual('number')
+      expect(suggestions[3].rightLabel).toEqual('string')
     })
   })
 })
