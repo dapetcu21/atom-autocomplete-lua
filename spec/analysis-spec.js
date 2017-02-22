@@ -151,4 +151,18 @@ describe('When analysing with empty options', () => {
       expect(suggestions[1].rightLabel).toEqual('number')
     })
   })
+
+  it('should not pollute namespace on subsequent completions', () => {
+    waitsForPromise(async () => {
+      await getSuggestions(options, `
+        a = 42
+        __prefix_placeholder__.__prefix_placeholder__()
+      `)
+      const suggestions = await getSuggestions(options, `
+        b = 42
+        __prefix_placeholder__.__prefix_placeholder__()
+      `)
+      expect(getNames(suggestions)).toEqual(['_G', 'b'])
+    })
+  })
 })
