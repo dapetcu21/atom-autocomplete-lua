@@ -71,7 +71,8 @@ The general format of a type definition is:
 ```javascript
 {
   "type": "type_name", // one of "function", "table", "number", "boolean", "string" or "unknown", "ref"
-  "description": "Optional short description of your symbol",
+  "description": "Optional short Markdown description of your symbol",
+  "descriptionPlain": "Optional short plain text description of your symbol (if you don't want Markdown for some reason)",
   "link": "http://optional.link/to/full/api/docs"
 }
 ```
