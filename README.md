@@ -21,9 +21,10 @@ This package aims to parse Lua files with [oxyc/luaparse](https://github.com/oxy
 * Configuration service for other packages to programmatically define globals
 * Autocomplete `require`d modules
 
-## Defold
+## Available Providers
 
-For Defold completion with this package, check out [Defold IDE](http://atom.io/packages/defold-ide)
+- [Defold IDE](http://atom.io/packages/defold-ide) - Adds hot reloading, autocompletion and in-line API docs for the [Defold](http://www.defold.com/) game engine.
+- [LÖVE Atom](https://github.com/rm-code/love-atom) - Smart autocompletion for the [LÖVE](https://love2d.org/) framework in Atom.
 
 ## Configuration
 
