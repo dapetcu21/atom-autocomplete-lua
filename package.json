@@ -46,6 +46,13 @@
       "title": "Min chars to start completion",
       "description": "The minimum number of typed characters required to start a completion"
     },
+    "completeModules": {
+      "order": 3.5,
+      "type": "boolean",
+      "default": true,
+      "title": "Complete modules",
+      "description": "Parse require()-d modules for type information"
+    },
     "excludeLowerPriority": {
       "order": 4,
       "type": "boolean",
