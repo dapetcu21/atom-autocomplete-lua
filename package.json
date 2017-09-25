@@ -1,0 +1,17 @@
+{
+  "name": "autocomplete-lua",
+  "version": "1.0.0-beta",
+  "scripts": {
+    "clean": "bsb -clean-world",
+    "build": "bsb -make-world",
+    "watch": "bsb -make-world -w",
+    "prepublish": "bsb -make-world"
+  },
+  "keywords": [
+    "BuckleScript"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "bs-platform": "1.9.2"
+  }
+}
