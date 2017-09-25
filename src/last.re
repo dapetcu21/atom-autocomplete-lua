@@ -42,9 +42,10 @@ type literal =
   | False
   | True
   | Number number
-  | Table (list (option expression, expression))
-  | Function (list string) bool block
+  | String string
   | Vararg
+  | Table (list (expression, expression))
+  | Function (list string) bool block
 and lvalue =
   | Name string
   | Index expression string

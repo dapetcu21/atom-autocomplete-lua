@@ -7,7 +7,7 @@
     "watch": "bsb -make-world -w",
     "prepublish": "npm run build",
     "test": "npm run build && jest",
-    "watch:test": "jest --watchAll"
+    "watch:test": "jest --watch"
   },
   "keywords": [
     "BuckleScript"
