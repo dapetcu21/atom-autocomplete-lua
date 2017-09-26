@@ -60,7 +60,7 @@ and expression =
   | BinOp binop expression expression
   | Call call
 and statement =
-  | If expression block block
+  | If expression block (option block)
   | WhileDo expression block
   | DoEnd block
   | ForStep string expression expression (option expression) block

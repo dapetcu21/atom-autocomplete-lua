@@ -35,7 +35,7 @@ let label_unop =
   | S.Length => L.Length
   | S.LogicalNot => L.LogicalNot;
 
-let rec label_fcallexp =
+let rec label_fcall =
   fun
   | S.Function calee args =>
     Last.FunctionCall (label_prefixexp calee) (List.map label_expression args)
@@ -45,7 +45,7 @@ let rec label_fcallexp =
 and label_prefixexp =
   fun
   | S.Var x => L.LValue (label_var x)
-  | S.FunctionCallExp call => L.Call (label_fcallexp call)
+  | S.FunctionCallExp call => L.Call (label_fcall call)
   | S.Exp x => label_expression x
 and label_var =
   fun
@@ -90,7 +90,64 @@ and label_expression =
         Literal (Table new_entries)
       }
   )
-and label_statement _ => L.Nop
+and label_if =
+  L.(
+    fun a b =>
+      switch (a, b) {
+      | ([], _) => Nop
+      | ([(exp, block)], None) =>
+        If (label_expression exp) (label_block block) None
+      | ([(exp, block)], Some else_branch) =>
+        If
+          (label_expression exp)
+          (label_block block)
+          (Some (label_block else_branch))
+      | ([(exp, block), ...branches], else_branch) =>
+        If
+          (label_expression exp)
+          (label_block block)
+          (Some [label_if branches else_branch])
+      }
+  )
+and label_statement =
+  L.(
+    fun
+    | S.Assign lvalues expressions =>
+      Assign
+        (List.map label_var lvalues) (List.map label_expression expressions)
+    | S.LocalAssign names expressions => {
+        let expr_list =
+          switch expressions {
+          | None => []
+          | Some l => List.map label_expression l
+          };
+        LocalAssign names expr_list
+      }
+    | S.FunctionCall x => CallStatement (label_fcall x)
+    | S.If branches else_branch => label_if branches else_branch
+    | S.ForStep name exp1 exp2 exp3 block =>
+      ForStep
+        name
+        (label_expression exp1)
+        (label_expression exp2)
+        (
+          switch exp3 {
+          | None => None
+          | Some exp => Some (label_expression exp)
+          }
+        )
+        (label_block block)
+    | S.ForIn names expressions block =>
+      ForIn names (List.map label_expression expressions) (label_block block)
+    | S.WhileDoEnd cond block =>
+      WhileDoEnd (label_expression cond) (label_block block)
+    | S.RepeatUntil block cond =>
+      RepeatUntil (label_block block) (label_expression cond)
+    | S.DoEnd b => DoEnd (label_block b)
+    | S.Break => Nop
+    | S.Goto _ => Nop
+    | S.Label _ => Nop
+  )
 and label_block (statements, return_statements) => {
   let labeled_statements = List.map label_statement statements;
   switch return_statements {
