@@ -16,6 +16,10 @@
   "devDependencies": {
     "bs-jest": "^0.1.0",
     "bs-platform": "1.9.2",
-    "jest": "^21.1.0"
+    "jest": "^21.1.0",
+    "standard": "^10.0.3"
+  },
+  "dependencies": {
+    "chevrotain": "^0.32.1"
   }
 }

@@ -10,7 +10,7 @@ let _ =
         open Last;
         let ast_test code ast () => expect (parse code) |> toEqual ast;
         let real_world_lua_input: string = [%bs.raw
-          {| require('fs').readFileSync(require('path').join(__dirname, '..', '..', '..', '__tests__', 'real_world.lua'), 'utf8') |}
+          {| require('fs').readFileSync(require('path').join(__dirname, '..', '..', '..', 'js', '__tests__', 'real_world.lua'), 'utf8') |}
         ];
         test
           "ignores labels, gotos and break"
