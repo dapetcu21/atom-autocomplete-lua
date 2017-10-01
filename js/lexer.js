@@ -108,6 +108,7 @@ createToken({
 createToken({ name: 'Plus', pattern: /\+/ })
 createToken({ name: 'Minus', pattern: /-/ })
 createToken({ name: 'Times', pattern: /\*/ })
+createToken({ name: 'FloorDiv', pattern: /\/\// })
 createToken({ name: 'Div', pattern: /\// })
 createToken({ name: 'Mod', pattern: /%/ })
 createToken({ name: 'Pow', pattern: /\^/ })
