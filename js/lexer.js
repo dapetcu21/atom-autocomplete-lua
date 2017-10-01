@@ -160,7 +160,7 @@ module.exports = {
     let lexingResult = LuaLexer.tokenize(inputText)
 
     if (lexingResult.errors.length > 0) {
-      throw Error('Sad Sad Panda, lexing errors detected')
+      throw Error(lexingResult.errors[0].message)
     }
 
     return lexingResult

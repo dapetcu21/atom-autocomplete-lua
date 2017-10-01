@@ -10,13 +10,6 @@
   }],
   "sources": [{
     "dir": "src",
-    "generators": [{
-      "name": "menhir",
-      "edge": ["parser.ml", "parser.mli", ":", "parser.mly"]
-    }, {
-      "name": "ocamllex",
-      "edge": ["lexer.ml", ":", "lexer.mll"]
-    }]
   }, {
     "dir": "__tests__",
     "type": "dev"
