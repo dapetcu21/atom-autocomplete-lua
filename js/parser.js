@@ -9,6 +9,7 @@ const {
   Equal, NotEqual, LessThanEqual, GreaterThanEqual, LessThan, GreaterThan,
   Assign, LeftParen, RightParen, LeftBrace, RightBrace, LeftBracket, RightBracket,
   Label, Semicolon, Colon, Comma, Vararg, Concat, Period,
+  BitwiseNot, BitwiseOr, BitwiseAnd, LeftShift, RightShift
 } = tokenVocabulary
 
 const {
