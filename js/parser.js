@@ -166,8 +166,42 @@ class LuaParser extends Parser {
       ])
     })
 
+    const powRight = (y, x) => binOp(arithmetic('^'), x, y)
+
+    this.term2 = $.RULE('term2', () => {
+      const first = $.SUBRULE1($.term1)
+      const prefixes = $.MANY(() => {
+        $.CONSUME(Pow)
+        return $.SUBRULE2($.term1)
+      })
+      if (!prefixes.length) { return first }
+      return powRight(prefixes.reduceRight(powRight), first)
+    })
+
+    this.term3 = $.RULE('term3', () => {
+      return $.OR([
+        {ALT: () => {
+          $.CONSUME(Length)
+          return unOp(length, $.SUBRULE1($.term3))
+        }},
+        {ALT: () => {
+          $.CONSUME(Minus)
+          return unOp(unaryMinus, $.SUBRULE2($.term3))
+        }},
+        {ALT: () => {
+          $.CONSUME(Not)
+          return unOp(logicalNot, $.SUBRULE3($.term3))
+        }},
+        {ALT: () => {
+          $.CONSUME(BitwiseNot)
+          return unOp(bitwiseNot, $.SUBRULE4($.term3))
+        }},
+        {ALT: () => $.SUBRULE($.term2)}
+      ])
+    })
+
     this.expression = $.RULE('expression', () => {
-      return $.SUBRULE($.term1)
+      return $.SUBRULE($.term3)
     })
 
     this.return = $.RULE('return', () => {

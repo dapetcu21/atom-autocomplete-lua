@@ -97,21 +97,6 @@ let _ =
             test_expression {| (a).b |} (LValue (Index (LValue (Name "a")) "b"))
           );
         test
-          "parses a ^ b ^ c"
-          (
-            test_expression
-              {| a ^ b ^ c |}
-              (
-                BinOp
-                  (Arithmetic "^")
-                  (LValue (Name "a"))
-                  (
-                    BinOp
-                      (Arithmetic "^") (LValue (Name "b")) (LValue (Name "c"))
-                  )
-              )
-          );
-        test
           "parses function call expressions"
           (
             test_expression
@@ -136,6 +121,36 @@ let _ =
                     "f"
                     [LValue (Name "foo"), Literal (String "\"bar\"")]
                 )
+              )
+          );
+        test
+          "parses a ^ b ^ c"
+          (
+            test_expression
+              {| a ^ b ^ c |}
+              (
+                BinOp
+                  (Arithmetic "^")
+                  (LValue (Name "a"))
+                  (
+                    BinOp
+                      (Arithmetic "^") (LValue (Name "b")) (LValue (Name "c"))
+                  )
+              )
+          );
+        test
+          "parses not ~ - # x"
+          (
+            test_expression
+              {| not ~ - # x |}
+              (
+                UnOp
+                  LogicalNot
+                  (
+                    UnOp
+                      BitwiseNot
+                      (UnOp UnaryMinus (UnOp Length (LValue (Name "x"))))
+                  )
               )
           )
       }
