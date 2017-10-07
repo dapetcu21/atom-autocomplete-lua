@@ -39,8 +39,11 @@ type literal =
   | Number string
   | String string
   | Vararg
-  | Table (list (expression, expression))
+  | Table (list (table_key, expression))
   | Function (list string) bool block
+and table_key =
+  | KeyExpression expression
+  | KeyName string
 and lvalue =
   | Name string
   | Index expression string
@@ -136,7 +139,7 @@ let vararg = Vararg;
 
 let table x => Table x;
 
-let function_ x y z => Function x y z;
+let function_ x y z => Function x (Js.to_bool y) z;
 
 let name x => Name x;
 
@@ -181,6 +184,12 @@ let whileDoEnd x y => WhileDoEnd x y;
 let repeatUntil x y => RepeatUntil x y;
 
 let nop = Nop;
+
+let keyExpression x => KeyExpression x;
+
+let keyName x => KeyName x;
+
+let pair x y => (x, y);
 
 let empty = [];
 

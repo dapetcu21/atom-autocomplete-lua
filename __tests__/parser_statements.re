@@ -8,41 +8,15 @@ let _ =
         open Expect;
         open Syntax;
         open Parser;
-        let ast_test code ast () => expect (Parser.parse code) |> toEqual ast;
-        let ast_test_rule rule code ast () =>
-          expect (Parser.parse_rule code rule) |> toEqual ast;
+        let test_block code ast () =>
+          expect (Parser.parse code) |> toEqual ast;
         let real_world_lua_input: string = [%bs.raw
           {| require('fs').readFileSync(require('path').join(__dirname, '..', '..', '..', 'js', '__tests__', 'real_world.lua'), 'utf8') |}
         ];
         test
-          "parses number literal"
-          (ast_test_rule "expression" "12" (Literal (Number "12")));
-        test
-          "parses string literal"
-          (ast_test_rule "expression" "'meow'" (Literal (String "'meow'")));
-        test
-          "parses block string literal"
-          (
-            ast_test_rule "expression" "[[meow]]" (Literal (String "[[meow]]"))
-          );
-        test "parses nil" (ast_test_rule "expression" "nil" (Literal Nil));
-        test "parses true" (ast_test_rule "expression" "true" (Literal True));
-        test
-          "parses false" (ast_test_rule "expression" "false" (Literal False));
-        test
-          "parses name" (ast_test_rule "expression" "a" (LValue (Name "a")));
-        test
-          "parses a + b"
-          (
-            ast_test_rule
-              "expression"
-              "a + b"
-              (BinOp (Arithmetic "+") (LValue (Name "a")) (LValue (Name "b")))
-          );
-        test
           "ignores labels, gotos and break"
           (
-            ast_test
+            test_block
               {|
                 ::useless_label1::
                 goto useless_label1
@@ -53,7 +27,7 @@ let _ =
         test
           "parses return statements"
           (
-            ast_test
+            test_block
               {|
                 return 12, 13, 14
               |}
@@ -66,44 +40,9 @@ let _ =
               ]
           );
         test
-          "parses tables"
-          (
-            ast_test
-              {|
-                return { a = "foo", "bar" }
-              |}
-              [
-                Return [
-                  Literal (
-                    Table [
-                      (Literal (String "a"), Literal (String "foo")),
-                      (Literal (Number "1"), Literal (String "bar"))
-                    ]
-                  )
-                ]
-              ]
-          );
-        test
-          "parses function call expressions"
-          (
-            ast_test
-              {|
-                return f(foo, "bar")
-              |}
-              [
-                Return [
-                  Call (
-                    FunctionCall
-                      (LValue (Name "f"))
-                      [LValue (Name "foo"), Literal (String "bar")]
-                  )
-                ]
-              ]
-          );
-        test
           "parses function call statements"
           (
-            ast_test
+            test_block
               {|
                 f(foo, "bar")
               |}
@@ -116,27 +55,9 @@ let _ =
               ]
           );
         test
-          "parses method call expressions"
-          (
-            ast_test
-              {|
-                return self:f(foo, "bar")
-              |}
-              [
-                Return [
-                  Call (
-                    MethodCall
-                      (LValue (Name "self"))
-                      "f"
-                      [LValue (Name "foo"), Literal (String "bar")]
-                  )
-                ]
-              ]
-          );
-        test
           "parses method call statements"
           (
-            ast_test
+            test_block
               {|
                 self:f(foo, "bar")
               |}
@@ -150,39 +71,9 @@ let _ =
               ]
           );
         test
-          "parses function definitions"
-          (
-            ast_test
-              {|
-                return function (a, b) return a end
-              |}
-              [
-                Return [
-                  Literal (
-                    Function ["a", "b"] false [Return [LValue (Name "a")]]
-                  )
-                ]
-              ]
-          );
-        test
-          "parses function definitions with varargs"
-          (
-            ast_test
-              {|
-                return function (a, b, ...) return a end
-              |}
-              [
-                Return [
-                  Literal (
-                    Function ["a", "b"] true [Return [LValue (Name "a")]]
-                  )
-                ]
-              ]
-          );
-        test
           "parses local statements"
           (
-            ast_test
+            test_block
               {|
                 local a, b
               |}
@@ -191,7 +82,7 @@ let _ =
         test
           "parses local assignments"
           (
-            ast_test
+            test_block
               {|
                 local a, b, c = "foo", unpack()
               |}
@@ -207,7 +98,7 @@ let _ =
         test
           "parses assignment"
           (
-            ast_test
+            test_block
               {|
                 a, b = c, d
               |}
@@ -219,7 +110,7 @@ let _ =
         test
           "parses if"
           (
-            ast_test
+            test_block
               {|
                 if cond then
                   return "foo"
@@ -232,7 +123,7 @@ let _ =
         test
           "parses if else"
           (
-            ast_test
+            test_block
               {|
                 if cond then
                   return "foo"
@@ -250,7 +141,7 @@ let _ =
         test
           "parses if elseif else"
           (
-            ast_test
+            test_block
               {|
                 if cond1 then
                   return "foo"
