@@ -5,7 +5,7 @@ const {
   Name, BlockString, Number, String,
   And, Break, Do, Else, Elseif, End, False, For, Function, Goto, If, In, Local,
   Nil, Not, Or, Repeat, Return, Then, True, Until, While,
-  Plus, Minus, Times, Div, Mod, Pow, Length,
+  Plus, Minus, Times, Div, FloorDiv, Mod, Pow, Length,
   Equal, NotEqual, LessThanEqual, GreaterThanEqual, LessThan, GreaterThan,
   Assign, LeftParen, RightParen, LeftBrace, RightBrace, LeftBracket, RightBracket,
   Label, Semicolon, Colon, Comma, Vararg, Concat, Period,
@@ -200,8 +200,28 @@ class LuaParser extends Parser {
       ])
     })
 
+    const arithmeticMultiplication = (x, y) => binOp(arithmetic('*'), x, y)
+    const arithmeticFloatDivision = (x, y) => binOp(arithmetic('/'), x, y)
+    const arithmeticFloorDivision = (x, y) => binOp(arithmetic('//'), x, y)
+    const arithmeticModulo = (x, y) => binOp(arithmetic('%'), x, y)
+
+    this.term4 = $.RULE('term4', () => {
+      const first = $.SUBRULE1($.term3)
+      const postfixes = $.MANY(() => {
+        const func = $.OR([
+          {ALT: () => { $.CONSUME(Times); return arithmeticMultiplication }},
+          {ALT: () => { $.CONSUME(Div); return arithmeticFloatDivision }},
+          {ALT: () => { $.CONSUME(FloorDiv); return arithmeticFloorDivision }},
+          {ALT: () => { $.CONSUME(Mod); return arithmeticModulo }}
+        ])
+        const arg = $.SUBRULE2($.term3)
+        return [func, arg]
+      })
+      return postfixes.reduce(leftAssociate, first)
+    })
+
     this.expression = $.RULE('expression', () => {
-      return $.SUBRULE($.term3)
+      return $.SUBRULE($.term4)
     })
 
     this.return = $.RULE('return', () => {

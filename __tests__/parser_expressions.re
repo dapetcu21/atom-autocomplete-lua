@@ -152,6 +152,33 @@ let _ =
                       (UnOp UnaryMinus (UnOp Length (LValue (Name "x"))))
                   )
               )
+          );
+        test
+          "parses a * b / c // d % e"
+          (
+            test_expression
+              {| a * b / c // d % e |}
+              (
+                BinOp
+                  (Arithmetic "%")
+                  (
+                    BinOp
+                      (Arithmetic "//")
+                      (
+                        BinOp
+                          (Arithmetic "/")
+                          (
+                            BinOp
+                              (Arithmetic "*")
+                              (LValue (Name "a"))
+                              (LValue (Name "b"))
+                          )
+                          (LValue (Name "c"))
+                      )
+                      (LValue (Name "d"))
+                  )
+                  (LValue (Name "e"))
+              )
           )
       }
     );
