@@ -251,8 +251,24 @@ class LuaParser extends Parser {
       return postfixes.reduce(leftAssociate, first)
     })
 
+    const arithmeticAddition = (x, y) => binOp(arithmetic('+'), x, y)
+    const arithmeticSubtraction = (x, y) => binOp(arithmetic('-'), x, y)
+
+    this.term5 = $.RULE('term5', () => {
+      const first = $.SUBRULE1($.term4)
+      const postfixes = $.MANY(() => {
+        const func = $.OR([
+          {ALT: () => { $.CONSUME(Plus); return arithmeticAddition }},
+          {ALT: () => { $.CONSUME(Minus); return arithmeticSubtraction }}
+        ])
+        const arg = $.SUBRULE2($.term4)
+        return [func, arg]
+      })
+      return postfixes.reduce(leftAssociate, first)
+    })
+
     this.expression = $.RULE('expression', () => {
-      return $.SUBRULE($.term4)
+      return $.SUBRULE($.term5)
     })
 
     this.return = $.RULE('return', () => {

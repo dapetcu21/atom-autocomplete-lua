@@ -179,6 +179,21 @@ let _ =
                   )
                   (LValue (Name "e"))
               )
+          );
+        test
+          "parses a + b - c"
+          (
+            test_expression
+              {| a + b - c |}
+              (
+                BinOp
+                  (Arithmetic "-")
+                  (
+                    BinOp
+                      (Arithmetic "+") (LValue (Name "a")) (LValue (Name "b"))
+                  )
+                  (LValue (Name "c"))
+              )
           )
       }
     );
