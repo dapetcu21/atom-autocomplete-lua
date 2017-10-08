@@ -13,9 +13,6 @@ const {
 } = tokenVocabulary
 
 const {
-  addition, subtraction, multiplication, floatDivision, floorDivision, modulo, exponentiation,
-  bitwiseAnd, bitwiseOr, bitwiseXor, shiftRight, shiftLeft,
-  equality, inequality, less, greater, lessEq, greaterEq,
   arithmetic, relational,
   and_, or_,
   concat,
@@ -29,7 +26,7 @@ const {
   return_, callStatement, whileDoEnd, repeatUntil,
   keyName, keyExpression,
   nop,
-  cons, empty, pair,
+  cons, empty, pair
 } = require('../lib/js/src/syntax')
 
 class LuaParser extends Parser {
@@ -267,8 +264,115 @@ class LuaParser extends Parser {
       return postfixes.reduce(leftAssociate, first)
     })
 
+    const concatRight = (y, x) => binOp(concat, x, y)
+
+    this.term6 = $.RULE('term6', () => {
+      const first = $.SUBRULE1($.term5)
+      const postfixes = $.MANY(() => {
+        $.CONSUME(Concat)
+        return $.SUBRULE2($.term5)
+      })
+      if (!postfixes.length) { return first }
+      return concatRight(postfixes.reduceRight(concatRight), first)
+    })
+
+    const arithmeticShiftLeft = (x, y) => binOp(arithmetic('<<'), x, y)
+    const arithmeticShiftRight = (x, y) => binOp(arithmetic('>>'), x, y)
+
+    this.term7 = $.RULE('term7', () => {
+      const first = $.SUBRULE1($.term6)
+      const postfixes = $.MANY(() => {
+        const func = $.OR([
+          {ALT: () => { $.CONSUME(LeftShift); return arithmeticShiftLeft }},
+          {ALT: () => { $.CONSUME(RightShift); return arithmeticShiftRight }}
+        ])
+        const arg = $.SUBRULE2($.term6)
+        return [func, arg]
+      })
+      return postfixes.reduce(leftAssociate, first)
+    })
+
+    const arithmeticBitwiseAnd = (x, y) => binOp(arithmetic('&'), x, y)
+
+    this.term8 = $.RULE('term8', () => {
+      const first = $.SUBRULE1($.term7)
+      const postfixes = $.MANY(() => {
+        $.CONSUME(BitwiseAnd)
+        return $.SUBRULE2($.term7)
+      })
+      return postfixes.reduce(arithmeticBitwiseAnd, first)
+    })
+
+    const arithmeticBitwiseXor = (x, y) => binOp(arithmetic('~'), x, y)
+
+    this.term9 = $.RULE('term9', () => {
+      const first = $.SUBRULE1($.term8)
+      const postfixes = $.MANY(() => {
+        $.CONSUME(BitwiseNot)
+        return $.SUBRULE2($.term8)
+      })
+      return postfixes.reduce(arithmeticBitwiseXor, first)
+    })
+
+    const arithmeticBitwiseOr = (x, y) => binOp(arithmetic('|'), x, y)
+
+    this.term10 = $.RULE('term10', () => {
+      const first = $.SUBRULE1($.term9)
+      const postfixes = $.MANY(() => {
+        $.CONSUME(BitwiseOr)
+        return $.SUBRULE2($.term9)
+      })
+      return postfixes.reduce(arithmeticBitwiseOr, first)
+    })
+
+    const relationalLessThan = (x, y) => binOp(relational('<'), x, y)
+    const relationalGreaterThan = (x, y) => binOp(relational('>'), x, y)
+    const relationalLessThanEqual = (x, y) => binOp(relational('<='), x, y)
+    const relationalGreaterThanEqual = (x, y) => binOp(relational('>='), x, y)
+    const relationalNotEqual = (x, y) => binOp(relational('~='), x, y)
+    const relationalEqual = (x, y) => binOp(relational('=='), x, y)
+
+    this.term11 = $.RULE('term11', () => {
+      const first = $.SUBRULE1($.term10)
+      const postfixes = $.MANY(() => {
+        const func = $.OR($.cRel = $.cRel || [
+          {ALT: () => { $.CONSUME(LessThan); return relationalLessThan }},
+          {ALT: () => { $.CONSUME(GreaterThan); return relationalGreaterThan }},
+          {ALT: () => { $.CONSUME(LessThanEqual); return relationalLessThanEqual }},
+          {ALT: () => { $.CONSUME(GreaterThanEqual); return relationalGreaterThanEqual }},
+          {ALT: () => { $.CONSUME(NotEqual); return relationalNotEqual }},
+          {ALT: () => { $.CONSUME(Equal); return relationalEqual }}
+        ])
+        const arg = $.SUBRULE2($.term10)
+        return [func, arg]
+      })
+      return postfixes.reduce(leftAssociate, first)
+    })
+
+    const binOpAnd = (x, y) => binOp(and_, x, y)
+
+    this.term12 = $.RULE('term12', () => {
+      const first = $.SUBRULE1($.term11)
+      const postfixes = $.MANY(() => {
+        $.CONSUME(And)
+        return $.SUBRULE2($.term11)
+      })
+      return postfixes.reduce(binOpAnd, first)
+    })
+
+    const binOpOr = (x, y) => binOp(or_, x, y)
+
+    this.term13 = $.RULE('term13', () => {
+      const first = $.SUBRULE1($.term12)
+      const postfixes = $.MANY(() => {
+        $.CONSUME(Or)
+        return $.SUBRULE2($.term12)
+      })
+      return postfixes.reduce(binOpOr, first)
+    })
+
     this.expression = $.RULE('expression', () => {
-      return $.SUBRULE($.term5)
+      return $.SUBRULE($.term13)
     })
 
     this.return = $.RULE('return', () => {
