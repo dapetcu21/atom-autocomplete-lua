@@ -194,6 +194,108 @@ let _ =
                   )
                   (LValue (Name "c"))
               )
+          );
+        test
+          "parses string concatenation"
+          (
+            test_expression
+              {| "foo" .. "bar" .. "baz" |}
+              (
+                BinOp
+                  Concat
+                  (Literal (String "\"foo\""))
+                  (
+                    BinOp
+                      Concat
+                      (Literal (String "\"bar\""))
+                      (Literal (String "\"baz\""))
+                  )
+              )
+          );
+        test
+          "parses bitwise shift operators"
+          (
+            test_expression
+              {| a << b >> c |}
+              (
+                BinOp
+                  (Arithmetic ">>")
+                  (
+                    BinOp
+                      (Arithmetic "<<") (LValue (Name "a")) (LValue (Name "b"))
+                  )
+                  (LValue (Name "c"))
+              )
+          );
+        test
+          "parses bitwise and"
+          (
+            test_expression
+              {| a & b |}
+              (BinOp (Arithmetic "&") (LValue (Name "a")) (LValue (Name "b")))
+          );
+        test
+          "parses bitwise xor"
+          (
+            test_expression
+              {| a ~ b |}
+              (BinOp (Arithmetic "~") (LValue (Name "a")) (LValue (Name "b")))
+          );
+        test
+          "parses bitwise or"
+          (
+            test_expression
+              {| a | b |}
+              (BinOp (Arithmetic "|") (LValue (Name "a")) (LValue (Name "b")))
+          );
+        test
+          "parses relational operators"
+          (
+            test_expression
+              {| a < b > c <= d >= e ~= f == g |}
+              (
+                BinOp
+                  (Relational "==")
+                  (
+                    BinOp
+                      (Relational "~=")
+                      (
+                        BinOp
+                          (Relational ">=")
+                          (
+                            BinOp
+                              (Relational "<=")
+                              (
+                                BinOp
+                                  (Relational ">")
+                                  (
+                                    BinOp
+                                      (Relational "<")
+                                      (LValue (Name "a"))
+                                      (LValue (Name "b"))
+                                  )
+                                  (LValue (Name "c"))
+                              )
+                              (LValue (Name "d"))
+                          )
+                          (LValue (Name "e"))
+                      )
+                      (LValue (Name "f"))
+                  )
+                  (LValue (Name "g"))
+              )
+          );
+        test
+          "parses and"
+          (
+            test_expression
+              {| a and b |} (BinOp And (LValue (Name "a")) (LValue (Name "b")))
+          );
+        test
+          "parses or"
+          (
+            test_expression
+              {| a or b |} (BinOp Or (LValue (Name "a")) (LValue (Name "b")))
           )
       }
     );
