@@ -296,6 +296,82 @@ let _ =
           (
             test_expression
               {| a or b |} (BinOp Or (LValue (Name "a")) (LValue (Name "b")))
+          );
+        test
+          "respects operator precedence"
+          (
+            test_expression
+              {| n or m and l == k | j ~ i & h << g .. - a ^ b - c * d * (e + f) |}
+              (
+                BinOp
+                  Or
+                  (LValue (Name "n"))
+                  (
+                    BinOp
+                      And
+                      (LValue (Name "m"))
+                      (
+                        BinOp
+                          (Relational "==")
+                          (LValue (Name "l"))
+                          (
+                            BinOp
+                              (Arithmetic "|")
+                              (LValue (Name "k"))
+                              (
+                                BinOp
+                                  (Arithmetic "~")
+                                  (LValue (Name "j"))
+                                  (
+                                    BinOp
+                                      (Arithmetic "&")
+                                      (LValue (Name "i"))
+                                      (
+                                        BinOp
+                                          (Arithmetic "<<")
+                                          (LValue (Name "h"))
+                                          (
+                                            BinOp
+                                              Concat
+                                              (LValue (Name "g"))
+                                              (
+                                                BinOp
+                                                  (Arithmetic "-")
+                                                  (
+                                                    UnOp
+                                                      UnaryMinus
+                                                      (
+                                                        BinOp
+                                                          (Arithmetic "^")
+                                                          (LValue (Name "a"))
+                                                          (LValue (Name "b"))
+                                                      )
+                                                  )
+                                                  (
+                                                    BinOp
+                                                      (Arithmetic "*")
+                                                      (
+                                                        BinOp
+                                                          (Arithmetic "*")
+                                                          (LValue (Name "c"))
+                                                          (LValue (Name "d"))
+                                                      )
+                                                      (
+                                                        BinOp
+                                                          (Arithmetic "+")
+                                                          (LValue (Name "e"))
+                                                          (LValue (Name "f"))
+                                                      )
+                                                  )
+                                              )
+                                          )
+                                      )
+                                  )
+                              )
+                          )
+                      )
+                  )
+              )
           )
       }
     );
