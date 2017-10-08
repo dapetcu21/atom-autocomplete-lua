@@ -73,6 +73,15 @@ class LuaParser extends Parser {
       return cons(items, first)
     })
 
+    this.expressionList = $.RULE('expressionList', () => {
+      const first = $.SUBRULE1($.expression)
+      const items = $.MANY(() => {
+        $.CONSUME(Comma)
+        return $.SUBRULE2($.expression)
+      }).reduceRight(cons, empty)
+      return cons(items, first)
+    })
+
     this.argList = $.RULE('argList', () => {
       let items = empty
       let vararg = false
@@ -101,6 +110,8 @@ class LuaParser extends Parser {
     const leftAssociate = (x, [f, y]) => f(x, y)
     const lValueDynIndex = (a, b) => lValue(dynIndex(a, b))
     const lValueIndex = (a, b) => lValue(index(a, b))
+    const functionCallExpr = (a, b) => call(functionCall(a, b))
+    const methodCallExpr = (a, [name, args]) => call(methodCall(a, name, args))
 
     this.prefixExp = $.RULE('prefixExp', () => {
       const first = $.OR1([
@@ -123,6 +134,26 @@ class LuaParser extends Parser {
           $.CONSUME(Period)
           const index = $.CONSUME2(Name).image
           return [lValueIndex, index]
+        }},
+        {ALT: () => {
+          $.CONSUME2(LeftParen)
+          let args = empty
+          $.OPTION(() => {
+            args = $.SUBRULE3($.expressionList)
+          })
+          $.CONSUME2(RightParen)
+          return [functionCallExpr, args]
+        }},
+        {ALT: () => {
+          $.CONSUME(Colon)
+          const name = $.CONSUME3(Name).image
+          $.CONSUME3(LeftParen)
+          let args = empty
+          $.OPTION2(() => {
+            args = $.SUBRULE4($.expressionList)
+          })
+          $.CONSUME3(RightParen)
+          return [methodCallExpr, [name, args]]
         }}
       ])).reduce(leftAssociate, first)
     })
