@@ -170,12 +170,12 @@ class LuaParser extends Parser {
 
     this.term2 = $.RULE('term2', () => {
       const first = $.SUBRULE1($.term1)
-      const prefixes = $.MANY(() => {
+      const postfixes = $.MANY(() => {
         $.CONSUME(Pow)
         return $.SUBRULE2($.term1)
       })
-      if (!prefixes.length) { return first }
-      return powRight(prefixes.reduceRight(powRight), first)
+      if (!postfixes.length) { return first }
+      return powRight(postfixes.reduceRight(powRight), first)
     })
 
     this.term3 = $.RULE('term3', () => {
