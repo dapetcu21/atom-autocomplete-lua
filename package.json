@@ -1,6 +1,6 @@
 {
   "name": "autocomplete-lua",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "Extensible autocomplete+ provider for Lua",
   "repository": {
     "type": "git",
