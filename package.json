@@ -105,8 +105,9 @@
     ]
   },
   "dependencies": {
+    "dapetcu21-luaparse": "^0.2.1",
+    "jsonic": "^0.3.1",
     "lodash.clonedeepwith": "^4.5.0",
-    "lodash.includes": "^4.3.0",
-    "dapetcu21-luaparse": "^0.2.1"
+    "lodash.includes": "^4.3.0"
   }
 }
