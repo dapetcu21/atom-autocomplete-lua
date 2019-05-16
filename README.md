@@ -89,9 +89,9 @@ Tables (`"type": "table"`) have 2 more properties:
 { // Type definition for a student
   "type": "table",
   "fields": {
-    "name": { type: "string" },
-    "surname": { type: "string" },
-    "height": { type: "number" },
+    "name": { "type": "string" },
+    "surname": { "type": "string" },
+    "height": { "type": "number" }
   },
   "metatable": {
     "type": "table",
@@ -161,10 +161,10 @@ You can provide multiple versions of the same function by moving `link`,
 { // Type definition for a get(url_or_filename) function
   "type": "function",
   "variants": [{
-    "args": [{ name: "url" }],
+    "args": [{ "name": "url" }],
     "description": "Fetches an URL and returns a string with the contents"
   }, {
-    "args": [{ name: "filename" }],
+    "args": [{ "name": "filename" }],
     "description": "Read the file at filename and returns a string with the contents"
   }]
 }
@@ -194,7 +194,7 @@ definition and define `my_named_type` in `namedTypes`.
       "make_a_cat_somehow_else": {
         "type": "function",
         "returnTypes": [{ "type": "ref", "name": "cat" }]
-      },
+      }
     }
   },
   "namedTypes": {
