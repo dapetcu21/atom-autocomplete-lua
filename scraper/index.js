@@ -160,7 +160,7 @@ function processSymbols () {
   options.global.fields.math.fields.pi.type = 'number'
 
   const filePath = path.join(__dirname, '..', 'lib', 'stdlib', `${luaVersion.replace(/\./g, '_')}.json`)
-  fs.writeFile(filePath, JSON.stringify(options, null, 2))
+  fs.writeFile(filePath, JSON.stringify(options, null, 2), () => {})
 }
 
 let parsingFunctions = false
