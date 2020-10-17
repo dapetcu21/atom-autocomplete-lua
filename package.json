@@ -19,6 +19,7 @@
         "5.1",
         "5.2",
         "5.3",
+        "5.4",
         "luajit-2.0"
       ],
       "title": "Default Lua version",
