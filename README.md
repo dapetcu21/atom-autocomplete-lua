@@ -1,6 +1,8 @@
 # atom-autocomplete-lua
 
-[![](https://img.shields.io/apm/dm/autocomplete-lua.svg)](http://atom.io/packages/autocomplete-lua) [![](https://img.shields.io/badge/liberapay-donate-yellow.svg)](https://liberapay.com/dapetcu21/donate) [![](https://img.shields.io/badge/paypal-donate-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KRJ4ZRJNU76Y2)
+[![](https://img.shields.io/apm/dm/autocomplete-lua.svg)](http://atom.io/packages/autocomplete-lua)
+
+**WARNING! Unmaintained project! Use at your own risk! I don't have the time and motivations to maintain this project anymore. If somebody wants to pick up maintenance for this, please contact me.**
 
 Atom Autocomplete+ provider for Lua.
 
